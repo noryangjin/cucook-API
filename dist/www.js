@@ -10,4 +10,3 @@ var server = app_1.default.listen(port, function () {
     console.log(port + "\uC5D0 \uC5F0\uACB0");
 });
 exports.default = server;
-"";

@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var app = express_1.default();
 app.get('/', function (req, res) {
-    return res.send('hellow');
+    return res.send('muns2');
 });
 exports.default = app;
