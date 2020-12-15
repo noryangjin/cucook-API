@@ -1,8 +1,0 @@
-{
-  "name": "cucook-API",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/noryangjin/cucook-API.git",
-  "author": "Mun94 <seongwoo720@gmail.com>",
-  "license": "MIT"
-}
