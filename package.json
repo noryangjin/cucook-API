@@ -8,6 +8,7 @@
   "devDependencies": {
     "@types/express": "^4.17.9",
     "@types/node": "^14.14.13",
+    "nodemon": "^2.0.6",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "tsc-watch": "^4.2.9",
@@ -19,6 +20,6 @@
   },
   "scripts": {
     "prestart": "tsc",
-    "start:dev": "tsc-watch --onSuccess \"node dist/www.js\""
+    "start:dev": "nodemon --watch src --delay 1 --exec ts-node src/www.ts"
   }
 }
