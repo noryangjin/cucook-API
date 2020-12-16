@@ -3,11 +3,14 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import morgan from 'morgan';
+import connect from './shemas/index';
+import apiRouter from './routes/index';
 
 const app: express.Application = express();
 
 class middleWare {
   private initMiddleWare(session_option) {
+    connect();
     app.use(morgan('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
@@ -21,12 +24,7 @@ class middleWare {
 }
 class router {
   private initRouters(_req, _res) {
-    app.get('/', (req, res) => {
-      return res.send('aa');
-    });
-    app.use('/a', (req, res) => {
-      return res.send('aaa');
-    });
+    app.use('/api', apiRouter);
   }
 
   constructor(req: any, res: any) {
@@ -46,5 +44,13 @@ const session_option: object = {
 
 new middleWare(session_option);
 new router(express.request, express.response);
+
+app.use((_, __, next) => {
+  next(new Error('없는 경로입니다.'));
+});
+
+app.use((err, res) => {
+  res.json(err);
+});
 
 export default app;
