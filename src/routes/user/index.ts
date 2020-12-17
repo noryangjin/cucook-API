@@ -1,8 +1,10 @@
 import express from 'express';
 import * as userCtrl from './user.ctrl';
+import * as middleWare from '../middleware';
 
 const user = express.Router();
 
-user.post('/register', userCtrl.register);
+user.post('/register', middleWare.isNotLoggedIn, userCtrl.register);
+user.post('/login', middleWare.isNotLoggedIn, userCtrl.login);
 
 export default user;

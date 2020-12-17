@@ -5,17 +5,22 @@ import session from 'express-session';
 import morgan from 'morgan';
 import connect from './shemas/index';
 import apiRouter from './routes/index';
+import passport from 'passport';
+import passportConfig from './passport/index';
 
 const app: express.Application = express();
 
 class middleWare {
   private initMiddleWare(session_option) {
+    passportConfig();
     connect();
     app.use(morgan('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser(process.env.COOKIE_SECRET));
     app.use(session(session_option));
+    app.use(passport.initialize());
+    app.use(passport.session());
   }
 
   constructor(session_option: object) {

@@ -1,6 +1,7 @@
 import User from '../../shemas/user';
 import Joi from '@hapi/joi';
 import bcrypt from 'bcrypt';
+import passport from 'passport';
 
 export const register = async (req, res, next) => {
   const schema = Joi.object().keys({
@@ -37,4 +38,23 @@ export const register = async (req, res, next) => {
   } catch (e) {
     return next(e);
   }
+};
+
+export const login = (req, res, next) => {
+  passport.authenticate('local', (authError, user, info) => {
+    if (authError) {
+      return next(authError);
+    }
+
+    if (!user) {
+      return res.status(401).json(info.message);
+    }
+
+    return req.login(user, (loginError) => {
+      if (loginError) {
+        return next(loginError);
+      }
+      res.json('로그인 성공');
+    });
+  })(req, res, next);
 };
