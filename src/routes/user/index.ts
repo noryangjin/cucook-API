@@ -3,6 +3,6 @@ import * as userCtrl from './user.ctrl';
 
 const user = express.Router();
 
-user.post('/', userCtrl.register);
+user.post('/register', userCtrl.register);
 
 export default user;

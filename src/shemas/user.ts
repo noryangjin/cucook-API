@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   username: String,
-  hashedPassword: String,
+  password: String,
 });
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('User', UserSchema);
