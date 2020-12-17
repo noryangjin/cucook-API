@@ -58,3 +58,9 @@ export const login = (req, res, next) => {
     });
   })(req, res, next);
 };
+
+export const logout = (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.json('로그아웃 성공');
+};
