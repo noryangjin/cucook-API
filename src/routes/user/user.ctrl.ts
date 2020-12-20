@@ -12,7 +12,7 @@ export const register = async (req, res, next) => {
   const result = schema.validate(req.body);
 
   if (result.error) {
-    res.status(400).send(result.error);
+    res.json(400, result.error);
     return;
   }
 
@@ -21,7 +21,7 @@ export const register = async (req, res, next) => {
   try {
     const exUser = await User.findOne({ username });
     if (exUser) {
-      res.status(409).json('계정 중복');
+      res.json(409, '계정 중복');
       return;
     } else {
       const hash = await bcrypt.hash(password, 12);
@@ -47,7 +47,7 @@ export const login = (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json(info.message);
+      return res.json(401, info.message);
     }
 
     return req.login(user, (loginError) => {

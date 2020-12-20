@@ -7,13 +7,14 @@ import connect from './shemas/index';
 import apiRouter from './routes/index';
 import passport from 'passport';
 import passportConfig from './passport/index';
+import cors from 'cors';
 
 const app: express.Application = express();
-
 class middleWare {
   private initMiddleWare(session_option) {
     passportConfig();
     connect();
+    app.use(cors());
     app.use(morgan('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
