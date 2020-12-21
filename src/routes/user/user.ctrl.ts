@@ -64,3 +64,19 @@ export const logout = (req, res) => {
   req.session.destroy();
   res.json('로그아웃 성공');
 };
+
+export const check = async (req, res, next) => {
+  try {
+    if (!req.user || !req.session) {
+      res.sendStatus(401);
+      return;
+    }
+    const { user } = req.session.passport;
+    const data = await User.findById(user);
+    const result = data.toJSON();
+    delete result['password'];
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+};
