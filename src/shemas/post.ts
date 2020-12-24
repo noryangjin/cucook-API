@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const {
   Types: { ObjectId },
 } = Schema;
+
 const PostSchema = new Schema({
   title: {
     type: String,
