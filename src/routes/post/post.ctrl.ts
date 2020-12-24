@@ -1,4 +1,3 @@
-import post from '.';
 import Post from '../../shemas/post';
 
 export const postList = async (req, res, next) => {

@@ -1,4 +1,9 @@
 import Post from '../shemas/post';
+import mongoose from 'mongoose';
+
+const {
+  Types: { ObjectId },
+} = mongoose;
 
 export const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -22,11 +27,23 @@ export const compareUser = async (req, res, next) => {
   try {
     const postUser = await Post.findById(id);
     if (postUser['writer'].toString() === user) {
-      next();
+      return next();
     } else {
       return res.json(401, '포스트 유저 정보와 로그인 유저 정보가 다릅니다.');
     }
   } catch (e) {
-    next(e);
+    return next(e);
+  }
+};
+
+export const checkObjectId = (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id)) {
+      return res.sendStatus(400);
+    }
+    return next();
+  } catch (e) {
+    return next(e);
   }
 };
