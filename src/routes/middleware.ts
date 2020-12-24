@@ -36,11 +36,15 @@ export const compareUser = async (req, res, next) => {
   }
 };
 
-export const checkObjectId = (req, res, next) => {
+export const checkObjectId = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id)) {
       return res.sendStatus(400);
+    }
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.sendStatus(404);
     }
     return next();
   } catch (e) {
