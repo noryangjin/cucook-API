@@ -1,5 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
-import { nextTick } from 'process';
+import mongoose from 'mongoose';
 require('dotenv').config();
 
 export default function () {
