@@ -9,15 +9,27 @@ export const postList = async (req, res, next) => {
   }
 };
 
+export const titleImg = async (req, res, next) => {
+  try {
+    res.json(req.file.path);
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const writePost = async (req, res, next) => {
-  const { title, body, tags } = req.body;
+  const { title, body, tags, titleImg } = req.body;
   const { user } = req.session.passport;
+
+  console.log('titleImg', titleImg, 'resreq', res.req.file);
   const post = new Post({
     title,
+    titleImg,
     body,
     tags,
     writer: user,
   });
+
   try {
     await post.save();
     const data = await Post.populate(post, { path: 'writer' });

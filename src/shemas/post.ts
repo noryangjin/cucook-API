@@ -10,6 +10,10 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
+  titleImg: {
+    type: String,
+    required: true,
+  },
   body: {
     type: String,
     required: true,

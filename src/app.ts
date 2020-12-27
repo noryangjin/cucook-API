@@ -8,6 +8,8 @@ import apiRouter from './routes/index';
 import passport from 'passport';
 import passportConfig from './passport/index';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
 
 const app: express.Application = express();
 class middleWare {
@@ -16,6 +18,7 @@ class middleWare {
     connect();
     app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
     app.use(morgan('dev'));
+    app.use('/img', express.static(path.join(__dirname, 'uploads')));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -48,6 +51,12 @@ const session_option: object = {
   },
 };
 
+fs.readdir('uploads', (error) => {
+  if (error) {
+    console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
+    fs.mkdirSync('uploads');
+  }
+});
 new middleWare(session_option);
 new router(express.request, express.response);
 

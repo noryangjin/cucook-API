@@ -6,6 +6,7 @@ const post = express.Router();
 
 post.get('/', postCtrl.postList);
 post.post('/', middleWare.isLoggedIn, postCtrl.writePost);
+post.post('/titleImg', middleWare.upload.single('titleImg'), postCtrl.titleImg);
 post.get('/:id', middleWare.checkObjectId, postCtrl.readPost);
 post.delete(
   '/:id',

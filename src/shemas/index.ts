@@ -8,7 +8,11 @@ export default function () {
     }
 
     mongoose
-      .connect(process.env.MONGO_URI, { dbName: 'cucook' })
+      .connect(process.env.MONGO_URI, {
+        dbName: 'cucook',
+        useNewUrlParser: true,
+        useFindAndModify: false,
+      })
       .then(() => console.log('몽고디비 연결 성공'))
       .catch((e) => console.error('에러 발생', e));
   };
