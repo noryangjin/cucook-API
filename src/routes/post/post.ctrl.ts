@@ -18,7 +18,7 @@ export const titleImg = async (req, res, next) => {
 };
 
 export const writePost = async (req, res, next) => {
-  const { category, title, body, ingredient, tags, titleImg } = req.body;
+  const { category, title, body, ingredients, tags, titleImg } = req.body;
   const { user } = req.session.passport;
 
   const post = new Post({
@@ -26,7 +26,7 @@ export const writePost = async (req, res, next) => {
     title,
     titleImg,
     body,
-    ingredient,
+    ingredients,
     tags,
     writer: user,
   });

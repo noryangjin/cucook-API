@@ -22,7 +22,7 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  ingredient: [String],
+  ingredients: [String],
   tags: [String],
   writer: {
     type: ObjectId,
