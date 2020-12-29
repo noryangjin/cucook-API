@@ -29,6 +29,10 @@ const PostSchema = new Schema({
     required: true,
     ref: 'User',
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
   publishedDate: {
     type: Date,
     default: Date.now,

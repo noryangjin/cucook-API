@@ -83,3 +83,17 @@ export const updatePost = async (req, res, next) => {
     next(e);
   }
 };
+
+export const postRegisterView = async (req, res, next) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const post = await Post.findById(id);
+    post['views'] += 1;
+    post.save();
+    res.json(post['views']);
+  } catch (e) {
+    next(e);
+  }
+};
