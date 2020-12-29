@@ -6,6 +6,10 @@ const {
 } = Schema;
 
 const PostSchema = new Schema({
+  category: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
@@ -18,6 +22,7 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
+  ingredient: [String],
   tags: [String],
   writer: {
     type: ObjectId,

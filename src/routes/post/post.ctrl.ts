@@ -18,14 +18,15 @@ export const titleImg = async (req, res, next) => {
 };
 
 export const writePost = async (req, res, next) => {
-  const { title, body, tags, titleImg } = req.body;
+  const { category, title, body, ingredient, tags, titleImg } = req.body;
   const { user } = req.session.passport;
 
-  console.log('titleImg', titleImg, 'resreq', res.req.file);
   const post = new Post({
+    category,
     title,
     titleImg,
     body,
+    ingredient,
     tags,
     writer: user,
   });
