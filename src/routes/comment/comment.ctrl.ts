@@ -10,6 +10,7 @@ export const readComment = async (req, res, next) => {
         path: 'commentWriter',
         select: 'username',
       },
+      options: { sort: { publishedDate: -1 } },
     });
 
     res.json(data['comments']);
@@ -44,6 +45,16 @@ export const writeComment = async (req, res, next) => {
       await post.save();
       res.json(comment);
     }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const deleteComment = async (req, res, next) => {
+  const { id } = req.param;
+  try {
+    await Comment.findByIdAndDelete(id);
+    res.json('댓글 삭제 완료');
   } catch (e) {
     next(e);
   }

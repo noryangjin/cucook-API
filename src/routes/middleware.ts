@@ -2,6 +2,7 @@ import Post from '../shemas/post';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
+import Comment from '../shemas/comment';
 
 const {
   Types: { ObjectId },
@@ -32,6 +33,25 @@ export const compareUser = async (req, res, next) => {
       return next();
     } else {
       return res.json(401, '포스트 유저 정보와 로그인 유저 정보가 다릅니다.');
+    }
+  } catch (e) {
+    return next(e);
+  }
+};
+
+export const compareUserComment = async (req, res, next) => {
+  const {
+    params: { id },
+    session: {
+      passport: { user },
+    },
+  } = req;
+  try {
+    const commentUser = await Comment.findById(id);
+    if (commentUser['commentWriter']['_id'].toString() === user) {
+      return next();
+    } else {
+      return res.json(401, '댓글 유저 정보와 로그인 유저 정보가 다릅니다.');
     }
   } catch (e) {
     return next(e);

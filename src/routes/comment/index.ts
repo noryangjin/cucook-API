@@ -11,5 +11,11 @@ comment.post(
   middleware.isLoggedIn,
   commentCtrl.writeComment
 );
+comment.delete(
+  '/:id',
+  middleware.isLoggedIn,
+  middleware.compareUserComment,
+  commentCtrl.deleteComment
+);
 
 export default comment;
