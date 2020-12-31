@@ -1,6 +1,23 @@
 import Comment from '../../shemas/comment';
 import Post from '../../shemas/post';
 
+export const readComment = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await Post.findById(id).populate({
+      path: 'comments',
+      populate: {
+        path: 'commentWriter',
+        select: 'username',
+      },
+    });
+
+    res.json(data['comments']);
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const writeComment = async (req, res, next) => {
   const {
     params: { id },

@@ -46,15 +46,7 @@ export const readPost = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const data = await Post.findById(id)
-      .populate('writer', 'username')
-      .populate({
-        path: 'comments',
-        populate: {
-          path: 'commentWriter',
-          select: 'username',
-        },
-      });
+    const data = await Post.findById(id).populate('writer', 'username');
 
     if (!data) {
       res.sendStatus(404);

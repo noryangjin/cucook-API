@@ -4,6 +4,7 @@ import * as commentCtrl from './comment.ctrl';
 
 const comment = express.Router();
 
+comment.get('/:id', middleware.checkObjectId, commentCtrl.readComment);
 comment.post(
   '/:id',
   middleware.checkObjectId,
