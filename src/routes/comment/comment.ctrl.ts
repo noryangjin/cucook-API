@@ -51,7 +51,7 @@ export const writeComment = async (req, res, next) => {
 };
 
 export const deleteComment = async (req, res, next) => {
-  const { id } = req.param;
+  const { id } = req.params;
   try {
     await Comment.findByIdAndDelete(id);
     res.json('댓글 삭제 완료');

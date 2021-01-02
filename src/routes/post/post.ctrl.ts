@@ -1,8 +1,18 @@
 import Post from '../../shemas/post';
+import User from '../../shemas/user';
 
 export const postList = async (req, res, next) => {
+  const { tag, username, ingredient, category } = req.query;
+
   try {
-    const data = await Post.find().populate('writer', '_id, username');
+    const user = await User.findOne({ username });
+    const query = {
+      ...(username ? { writer: user['_id'] } : {}),
+      ...(tag ? { tags: tag } : {}),
+      ...(ingredient ? { ingredients: ingredient } : {}),
+      ...(category ? { category } : {}),
+    };
+    const data = await Post.find(query).populate('writer', '_id, username');
     res.json(data);
   } catch (e) {
     next(e);
