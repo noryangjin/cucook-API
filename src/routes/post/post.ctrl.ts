@@ -2,17 +2,24 @@ import Post from '../../shemas/post';
 import User from '../../shemas/user';
 
 export const postList = async (req, res, next) => {
-  const { tag, username, ingredient, category } = req.query;
-
+  const { tag, username, ingredient, category, sort } = req.query;
+  console.log('sortsssssss', sort);
   try {
-    const user = await User.findOne({ username });
+    const user = username && (await User.findOne({ username }));
     const query = {
       ...(username ? { writer: user['_id'] } : {}),
       ...(tag ? { tags: tag } : {}),
       ...(ingredient ? { ingredients: ingredient } : {}),
       ...(category ? { category } : {}),
     };
-    const data = await Post.find(query).populate('writer', '_id, username');
+    const sort_ = {
+      ...(sort ? { sort: -1 } : { publishedDate: -1 }),
+    };
+
+    const data = await Post.find(query)
+      .populate('writer', '_id, username')
+      .sort(sort_);
+
     res.json(data);
   } catch (e) {
     next(e);
