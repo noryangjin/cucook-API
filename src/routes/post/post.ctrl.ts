@@ -2,8 +2,9 @@ import Post from '../../shemas/post';
 import User from '../../shemas/user';
 
 export const postList = async (req, res, next) => {
-  const { tag, username, ingredient, category, sort } = req.query;
-  console.log('sortsssssss', sort);
+  const { tag, username, ingredient, category, sort, page } = req.query;
+  const page_ = page || 1;
+
   try {
     const user = username && (await User.findOne({ username }));
     const query = {
@@ -13,12 +14,13 @@ export const postList = async (req, res, next) => {
       ...(category ? { category } : {}),
     };
     const sort_ = {
-      ...(sort ? { sort: -1 } : { publishedDate: -1 }),
+      ...(sort ? { views: -1 } : { publishedDate: -1 }),
     };
 
     const data = await Post.find(query)
       .populate('writer', '_id, username')
-      .sort(sort_);
+      .sort(sort_)
+      .limit(page_ * 10);
 
     res.json(data);
   } catch (e) {

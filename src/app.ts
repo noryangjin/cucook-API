@@ -73,4 +73,5 @@ app.use((err, res) => {
   res.json(err);
 });
 
+export const sessionOption = session_option;
 export default app;
