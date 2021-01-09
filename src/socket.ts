@@ -1,6 +1,7 @@
 const socketIO = require('socket.io');
+import axios from 'axios';
 
-const webSocket = (server, app, sessionOption) => {
+const webSocket = (server, app) => {
   const io = socketIO(server, {
     path: '/socket.io',
     cors: {
@@ -8,22 +9,36 @@ const webSocket = (server, app, sessionOption) => {
     },
   });
 
-  io.on('connection', (socket) => {
+  app.set('io', io);
+
+  const chat = io.of('/chat');
+
+  // io.use((socket, next) => {
+  //   sessionOption(socket.request, socket.request.res, next);
+  // });
+
+  chat.on('connection', (socket) => {
     const req = socket.request;
-    const ip =
-      req.headers['x-forwarded-for'] ||
-      (req.connection && req.connection.remoteAddress) ||
-      '';
 
-    console.log('새로운 클라이언트 접속', ip, socket.id);
+    console.log('reqreqreqw', req.session);
+    console.log('chat 네임스페이스에 접속');
 
-    socket.on('error', (error) => {
-      console.error(error);
+    socket.on('con', (data) => {
+      app.set('data', data);
+      const roomId = data.roomId;
+      const username = data.user.username;
+      console.log('data', data);
+
+      socket.join(roomId);
+      socket.to(roomId).emit('join', {
+        chat: `${new Date()}님이 접속 하셨습니다.`,
+      });
     });
 
-    socket.on('reply', (data) => {
-      console.log(data);
-      socket.emit('news', data);
+    socket.on('disconnect', () => {
+      const data = app.get('data');
+      console.log('chat 종료!!!!');
+      socket.leave(data.roomId);
     });
   });
 };

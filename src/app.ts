@@ -10,50 +10,19 @@ import passportConfig from './passport/index';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import webSocket from './socket';
 
 const app: express.Application = express();
-class middleWare {
-  private initMiddleWare(session_option) {
-    passportConfig();
-    connect();
-    app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-    app.use(morgan('dev'));
-    app.use('/img', express.static(path.join(__dirname, '../uploads')));
-    app.use(
-      express.json({
-        limit: '50mb',
-      })
-    );
-    app.use(express.urlencoded({ limit: '50mb', extended: false }));
-    app.use(cookieParser(process.env.COOKIE_SECRET));
-    app.use(session(session_option));
-    app.use(passport.initialize());
-    app.use(passport.session());
-  }
-
-  constructor(session_option: object) {
-    this.initMiddleWare(session_option);
-  }
-}
-class router {
-  private initRouters(_req, _res) {
-    app.use('/api', apiRouter);
-  }
-
-  constructor(req: any, res: any) {
-    this.initRouters(req, res);
-  }
-}
-
 const session_option: object = {
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
     secure: false,
   },
 };
+const port: number = Number(process.env.PORT) || 4000;
 
 fs.readdir('uploads', (error) => {
   if (error) {
@@ -62,8 +31,23 @@ fs.readdir('uploads', (error) => {
   }
 });
 
-new middleWare(session_option);
-new router(express.request, express.response);
+passportConfig();
+connect();
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(morgan('dev'));
+app.use('/img', express.static(path.join(__dirname, '../uploads')));
+app.use(
+  express.json({
+    limit: '50mb',
+  })
+);
+app.use(express.urlencoded({ limit: '50mb', extended: false }));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(session(session_option));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/api', apiRouter);
 
 app.use((_, __, next) => {
   next(new Error('없는 경로입니다.'));
@@ -73,5 +57,8 @@ app.use((err, res) => {
   res.json(err);
 });
 
-export const sessionOption = session_option;
-export default app;
+const server = app.listen(port, () => {
+  console.log(`${port}에 연결`);
+});
+
+webSocket(server, app);

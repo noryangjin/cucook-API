@@ -32,6 +32,6 @@
   },
   "scripts": {
     "prestart": "tsc",
-    "start:dev": "nodemon --watch src --delay 1 --exec ts-node src/www.ts"
+    "start:dev": "nodemon --watch src --delay 1 --exec ts-node src/app.ts"
   }
 }
