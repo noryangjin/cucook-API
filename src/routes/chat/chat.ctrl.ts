@@ -5,7 +5,9 @@ import Post from '../../shemas/post';
 
 export const readRoomList = async (req, res, next) => {
   try {
-    const roomList = await ChatRoom.find();
+    const roomList = await ChatRoom.find({}, { chat: 0 }).sort({
+      createdAt: -1,
+    });
 
     res.json(roomList);
   } catch (e) {
@@ -41,23 +43,18 @@ export const readRoom = async (req, res, next) => {
     const { password } = req.body;
 
     const room = await ChatRoom.findById(roomId);
-    const io = req.app.get('io');
-
-    console.log('리드룸!!!!!!!!!!!!!11');
 
     if (!room) {
       res.sendStatus(404);
       return;
     }
-    if (room['password'] && room['password'] !== password) {
+
+    const compare = await bcrypt.compare(password, room['password']);
+    if (room['password'] && !compare) {
       res.sendStatus(401);
       return;
     }
-    const { rooms } = io.of('/chat').adapter;
-
-    if (rooms && rooms[roomId] && room['max'] < rooms[roomId].length) {
-      console.log('허용인원 초과!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
-    }
+    res.json(room);
   } catch (e) {
     next(e);
   }

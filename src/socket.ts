@@ -30,15 +30,19 @@ const webSocket = (server, app) => {
       console.log('data', data);
 
       socket.join(roomId);
+      socket.emit('create', {
+        chat: `${username}님이 접속 하셨습니다.`,
+      });
+
       socket.to(roomId).emit('join', {
-        chat: `${new Date()}님이 접속 하셨습니다.`,
+        chat: `${username}님이 접속 하셨습니다.!`,
       });
     });
 
     socket.on('disconnect', () => {
       const data = app.get('data');
       console.log('chat 종료!!!!');
-      socket.leave(data.roomId);
+      data && socket.leave(data.roomId);
     });
   });
 };

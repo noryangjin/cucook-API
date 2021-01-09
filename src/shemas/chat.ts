@@ -6,11 +6,6 @@ const {
 } = Schema;
 
 const chatSchema = new Schema({
-  room: {
-    type: ObjectId,
-    ref: 'ChatRoom',
-    required: true,
-  },
   user: {
     type: ObjectId,
     ref: 'User',
