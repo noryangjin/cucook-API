@@ -9,5 +9,6 @@ chat.post('/', middleware.isLoggedIn, chatCtrl.roomCreate);
 chat.post('/:roomId', middleware.isLoggedIn, chatCtrl.readRoom);
 chat.get('/join/:roomId', middleware.isLoggedIn, chatCtrl.roomJoin);
 chat.get('/out/:roomId', middleware.isLoggedIn, chatCtrl.leaveRoom);
+chat.post('/chat/:roomId', middleware.isLoggedIn, chatCtrl.chating);
 
 export default chat;

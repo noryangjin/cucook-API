@@ -50,6 +50,7 @@ export const readRoom = async (req, res, next) => {
     }
 
     const compare = await bcrypt.compare(password, room['password']);
+
     if (room['password'] && !compare) {
       res.sendStatus(401);
       return;
@@ -73,7 +74,7 @@ export const roomJoin = async (req, res, next) => {
     if (room) {
       room['participants'].push(user);
       await room.save();
-      res.json('방 참여');
+      res.json(room);
     }
   } catch (e) {
     next(e);
@@ -97,6 +98,30 @@ export const leaveRoom = async (req, res, next) => {
       await room.save();
       res.json('방 Leave');
     }
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const chating = async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+    const { user } = req.session.passport;
+    const { chatContent } = req.body;
+
+    const chat = new Chat({
+      user,
+      chat: chatContent,
+    });
+    await chat.save();
+
+    req.app.get('io').of('/chat').to(roomId).emit('chat', chat);
+
+    const room = await ChatRoom.findById(roomId);
+    room['chat'].push(chat);
+    await room.save();
+
+    res.json(chat);
   } catch (e) {
     next(e);
   }

@@ -27,12 +27,7 @@ const chatRoomSchema = new Schema({
       ref: 'User',
     },
   ],
-  chat: [
-    {
-      type: ObjectId,
-      ref: 'Chat',
-    },
-  ],
+  chat: [],
   password: String,
   createdAt: {
     type: Date,
