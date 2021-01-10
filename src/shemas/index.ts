@@ -1,3 +1,4 @@
+import { timeStamp } from 'console';
 import mongoose from 'mongoose';
 require('dotenv').config();
 
@@ -12,6 +13,7 @@ export default function () {
         dbName: 'cucook',
         useNewUrlParser: true,
         useFindAndModify: false,
+        useUnifiedTopology: true,
       })
       .then(() => console.log('몽고디비 연결 성공'))
       .catch((e) => console.error('에러 발생', e));

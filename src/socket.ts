@@ -25,16 +25,11 @@ const webSocket = (server, app) => {
       if (error) return callback(error);
       socket.join(user.room);
       socket.emit('message', {
-        chat: `${name}님이 접속 하셨습니다.!`,
+        chat: `${name}님이 접속 하셨습니다!`,
       });
       socket.broadcast
         .to(user.room)
-        .emit('message', { chat: `${name}님이 접속` });
-
-      chat.to(user.room).emit('roomData', {
-        room: user.room,
-        users: getUsersInRoom(user.room),
-      });
+        .emit('message', { chat: `${name}님이 접속 하셨습니다!` });
 
       callback();
     });
