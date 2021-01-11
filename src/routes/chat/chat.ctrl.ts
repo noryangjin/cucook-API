@@ -25,6 +25,9 @@ export const roomCreate = async (req, res, next) => {
       user,
     });
     await join.save();
+    const result = await JoinUser.populate(join, { path: 'user' });
+    const userPassDel = result.toJSON();
+    delete userPassDel['user']['password'];
 
     const create = new ChatRoom({
       title,
@@ -32,7 +35,7 @@ export const roomCreate = async (req, res, next) => {
       owner: user,
       password: hash,
     });
-    create['participants'].push(join);
+    create['participants'].push(userPassDel);
     const data = await create.save();
 
     res.json(data._id);
@@ -79,13 +82,17 @@ export const roomJoin = async (req, res, next) => {
       user,
     });
     await join.save();
+    const result = await JoinUser.populate(join, { path: 'user' });
+    const userPassDel = result.toJSON();
+    delete userPassDel['user']['password'];
+
     const room = await ChatRoom.findById(roomId);
     if (!room) {
       return res.sendStatus(404);
     }
 
     if (room) {
-      room['participants'].push(join);
+      room['participants'].push(userPassDel);
 
       await room.save();
       res.json(room);
