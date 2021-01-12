@@ -7,7 +7,8 @@ export const addUser = ({ id, name, room }) => {
 
   if (!name || !room)
     return { error: '유저 이름 또는 방 정보를 확인 해주세요' };
-  if (existingUser) return { error: '이미 존재합니다.' };
+  if (existingUser)
+    return { error: '이미 존재합니다. 새로고침 후 다시 이용해주세요' };
 
   const user = { id, name, room };
 

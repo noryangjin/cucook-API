@@ -107,9 +107,18 @@ export const leaveRoom = async (req, res, next) => {
       return res.sendStatus(404);
     }
 
+    console.log(user);
+
     if (room) {
-      const index = room['participants'].indexOf(user);
-      room['participants'].splice(index, 1);
+      console.log(room);
+      console.log(user);
+      console.log(typeof user);
+
+      room['participants'].map(
+        (ro, index) =>
+          ro['user']['_id'] == user && room['participants'].splice(index, 1)
+      );
+
       await room.save();
       res.json('방 Leave');
     }
@@ -131,7 +140,7 @@ export const chating = async (req, res, next) => {
     await chat.save();
     const data = await Chat.populate(chat, { path: 'user' });
     const result = data.toJSON();
-    delete result['password'];
+    delete result['user']['password'];
 
     const room = await ChatRoom.findById(roomId);
     room['chat'].push(result);
