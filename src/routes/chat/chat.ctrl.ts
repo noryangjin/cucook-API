@@ -56,18 +56,12 @@ export const readRoom = async (req, res, next) => {
       return;
     }
 
-    if (password) {
-      const compare = await bcrypt.compare(password, room['password']);
-      if (room['password'] && !compare) {
-        res.sendStatus(401);
-        return;
-      }
-      res.json(room);
+    const compare = await bcrypt.compare(password, room['password']);
+    if (room['password'] && !compare) {
+      res.sendStatus(401);
+      return;
     }
-
-    if (!password && !room['password']) {
-      res.json(room);
-    }
+    res.json(room);
   } catch (e) {
     next(e);
   }
@@ -135,11 +129,12 @@ export const chating = async (req, res, next) => {
       chat: chatContent,
     });
     await chat.save();
-
-    req.app.get('io').of('/chat').to(roomId).emit('chat', chat);
+    const data = await Chat.populate(chat, { path: 'user' });
+    const result = data.toJSON();
+    delete result['password'];
 
     const room = await ChatRoom.findById(roomId);
-    room['chat'].push(chat);
+    room['chat'].push(result);
     await room.save();
 
     res.json(chat);

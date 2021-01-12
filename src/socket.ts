@@ -1,5 +1,5 @@
 const socketIO = require('socket.io');
-import { addUser, removeUser, getUser, getUsersInRoom } from './socket_user';
+import { addUser, removeUser, getUser } from './socket_user';
 
 const webSocket = (server, app) => {
   const io = socketIO(server, {
@@ -45,10 +45,6 @@ const webSocket = (server, app) => {
       const user = removeUser(socket.id);
       if (user) {
         chat.to(user.room).emit('message', { text: `${user.name} has left.` });
-        chat.to(user.room).emit('roomData', {
-          room: user.room,
-          users: getUsersInRoom(user.room),
-        });
         socket.leave(user.room);
       }
     });
