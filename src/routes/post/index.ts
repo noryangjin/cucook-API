@@ -7,6 +7,7 @@ const post = express.Router();
 post.get('/', postCtrl.postList);
 post.post('/', middleWare.isLoggedIn, postCtrl.writePost);
 post.post('/titleImg', middleWare.upload.single('titleImg'), postCtrl.titleImg);
+post.get('/search', postCtrl.searchPost);
 post.get('/:id', middleWare.checkObjectId, postCtrl.readPost);
 post.post('/view/:id', middleWare.checkObjectId, postCtrl.postRegisterView);
 post.delete(

@@ -118,3 +118,27 @@ export const postRegisterView = async (req, res, next) => {
     next(e);
   }
 };
+
+export const searchPost = async (req, res, next) => {
+  try {
+    const {
+      query: { term },
+    } = req;
+
+    const title = await Post.find({
+      title: { $regex: term, $options: 'i' },
+    });
+
+    const ingredients = await Post.find({
+      ingredients: { $regex: term, $options: 'i' },
+    });
+
+    const tags = await Post.find({
+      tags: { $regex: term, $options: 'i' },
+    });
+
+    res.json([...title, ...ingredients, ...tags]);
+  } catch (e) {
+    next(e);
+  }
+};

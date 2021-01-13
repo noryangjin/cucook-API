@@ -107,13 +107,7 @@ export const leaveRoom = async (req, res, next) => {
       return res.sendStatus(404);
     }
 
-    console.log(user);
-
     if (room) {
-      console.log(room);
-      console.log(user);
-      console.log(typeof user);
-
       room['participants'].map(
         (ro, index) =>
           ro['user']['_id'] == user && room['participants'].splice(index, 1)
