@@ -1,3 +1,4 @@
+import { timeStamp } from 'console';
 import Post from '../../shemas/post';
 import User from '../../shemas/user';
 
@@ -137,7 +138,12 @@ export const searchPost = async (req, res, next) => {
       tags: { $regex: term, $options: 'i' },
     });
 
-    res.json([...title, ...ingredients, ...tags]);
+    const data = [...title, ...ingredients, ...tags];
+    const a = data.map((ar) => JSON.stringify(ar));
+    const b = [Array.from(new Set(a))][0];
+    const result = b.map((ar: any) => JSON.parse(ar));
+
+    res.json(result);
   } catch (e) {
     next(e);
   }
