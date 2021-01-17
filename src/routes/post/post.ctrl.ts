@@ -1,4 +1,3 @@
-import { timeStamp } from 'console';
 import Post from '../../shemas/post';
 import User from '../../shemas/user';
 
@@ -126,19 +125,29 @@ export const searchPost = async (req, res, next) => {
       query: { term },
     } = req;
 
+    const user = await User.findOne({
+      username: { $regex: term, $options: 'i' },
+    });
+
+    const user_ = user
+      ? await Post.find({
+          writer: user['_id'],
+        }).populate('writer', '_id, username')
+      : [];
+
     const title = await Post.find({
       title: { $regex: term, $options: 'i' },
-    });
+    }).populate('writer', '_id, username');
 
     const ingredients = await Post.find({
       ingredients: { $regex: term, $options: 'i' },
-    });
+    }).populate('writer', '_id, username');
 
     const tags = await Post.find({
       tags: { $regex: term, $options: 'i' },
-    });
+    }).populate('writer', '_id, username');
 
-    const data = [...title, ...ingredients, ...tags];
+    const data = [...user_, ...title, ...ingredients, ...tags];
     const a = data.map((ar) => JSON.stringify(ar));
     const b = [Array.from(new Set(a))][0];
     const result = b.map((ar: any) => JSON.parse(ar));
