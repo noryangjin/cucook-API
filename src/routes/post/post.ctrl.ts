@@ -2,13 +2,11 @@ import Post from '../../shemas/post';
 import User from '../../shemas/user';
 
 export const postList = async (req, res, next) => {
-  const { tag, username, ingredient, category, sort, page } = req.query;
+  const { tag, ingredient, category, sort, page } = req.query;
   const page_ = page || 1;
 
   try {
-    const user = username && (await User.findOne({ username }));
     const query = {
-      ...(username ? { writer: user['_id'] } : {}),
       ...(tag ? { tags: tag } : {}),
       ...(ingredient ? { ingredients: ingredient } : {}),
       ...(category ? { category } : {}),
@@ -22,7 +20,14 @@ export const postList = async (req, res, next) => {
       .sort(sort_)
       .limit(page_ * 10);
 
-    res.json(data);
+    const result = data.map((post) => {
+      const data = post.toJSON();
+      delete data['body'];
+      delete data['comments'];
+      return data;
+    });
+
+    res.json(result);
   } catch (e) {
     next(e);
   }
@@ -89,11 +94,12 @@ export const deletePost = async (req, res, next) => {
 
 export const updatePost = async (req, res, next) => {
   const { id } = req.params;
-  const { title, body, tags } = req.body;
+  const { title, body, tags, ingredients, titleImg, category } = req.body;
+
   try {
     const data = await Post.findByIdAndUpdate(
       id,
-      { title, body, tags },
+      { title, body, tags, ingredients, titleImg, category },
       { new: true }
     );
     if (!data) {
@@ -132,23 +138,37 @@ export const searchPost = async (req, res, next) => {
     const user_ = user
       ? await Post.find({
           writer: user['_id'],
-        }).populate('writer', '_id, username')
+        })
+          .populate('writer', '_id, username')
+          .sort({ publishedDate: -1 })
       : [];
 
     const title = await Post.find({
       title: { $regex: term, $options: 'i' },
-    }).populate('writer', '_id, username');
+    })
+      .populate('writer', '_id, username')
+      .sort({ publishedDate: -1 });
 
     const ingredients = await Post.find({
       ingredients: { $regex: term, $options: 'i' },
-    }).populate('writer', '_id, username');
+    })
+      .populate('writer', '_id, username')
+      .sort({ publishedDate: -1 });
 
     const tags = await Post.find({
       tags: { $regex: term, $options: 'i' },
-    }).populate('writer', '_id, username');
+    })
+      .populate('writer', '_id, username')
+      .sort({ publishedDate: -1 });
 
     const data = [...user_, ...title, ...ingredients, ...tags];
-    const a = data.map((ar) => JSON.stringify(ar));
+    const array = data.map((post) => {
+      const data = post.toJSON();
+      delete data['body'];
+      delete data['comments'];
+      return data;
+    });
+    const a = array.map((ar) => JSON.stringify(ar));
     const b = [Array.from(new Set(a))][0];
     const result = b.map((ar: any) => JSON.parse(ar));
 

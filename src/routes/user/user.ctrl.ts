@@ -1,4 +1,5 @@
 import User from '../../shemas/user';
+import Post from '../../shemas/post';
 import Joi from '@hapi/joi';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
@@ -75,6 +76,32 @@ export const check = async (req, res, next) => {
     const data = await User.findById(user);
     const result = data.toJSON();
     delete result['password'];
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const userInfo = async (req, res, next) => {
+  try {
+    const {
+      params: { username },
+    } = req;
+    const user = await User.find({ username: username });
+    if (user.length === 0) {
+      return res.sendStatus(404);
+    }
+    const userPost = await Post.find({ writer: user[0]._id }).sort({
+      publishedDate: -1,
+    });
+    const result = userPost.map((post) => {
+      const data = post.toJSON();
+      delete data['body'];
+      delete data['comments'];
+      delete data['ingredients'];
+      delete data['tags'];
+      return data;
+    });
     res.json(result);
   } catch (e) {
     next(e);
