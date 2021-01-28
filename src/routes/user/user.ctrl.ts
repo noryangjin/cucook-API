@@ -6,7 +6,7 @@ import passport from 'passport';
 
 export const register = async (req, res, next) => {
   const schema = Joi.object().keys({
-    username: Joi.string().min(3).max(10).required(),
+    username: Joi.string().min(3).max(12).required(),
     password: Joi.string().required(),
   });
 
