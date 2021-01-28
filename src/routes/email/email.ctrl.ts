@@ -7,7 +7,7 @@ const { MYEMAIL, EMAIL_PASSWORD } = process.env;
 
 export const sendEmail = (req, res, next) => {
   try {
-    const { username, guestEmail, title, text } = req.body;
+    const { username, guestEmail, title, content } = req.body;
     const smtpTransport = nodemailer.createTransport({
       service: 'gmail',
       port: 587,
@@ -28,7 +28,7 @@ export const sendEmail = (req, res, next) => {
       <div><b>보낸 분 주소 : ${guestEmail}</b></div>
       <div><b>보낸 분 성함 : ${username}</b></div>
       <br/>
-      <div>${text}</div>`,
+      <div>${content}</div>`,
     };
 
     smtpTransport.sendMail(mailOptions, function (error, response) {

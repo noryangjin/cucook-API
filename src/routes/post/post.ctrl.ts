@@ -35,7 +35,7 @@ export const postList = async (req, res, next) => {
 
 export const titleImg = async (req, res, next) => {
   try {
-    res.json(`http://localhost:4000/img/${req.file.filename}`);
+    res.json(`${req.file.location}`);
   } catch (e) {
     next(e);
   }

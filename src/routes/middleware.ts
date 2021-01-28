@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 import Comment from '../shemas/comment';
+import multerS3 from 'multer-s3';
+import aws from 'aws-sdk';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const {
   Types: { ObjectId },
@@ -74,15 +78,15 @@ export const checkObjectId = async (req, res, next) => {
   }
 };
 
+const s3 = new aws.S3({
+  accessKeyId: process.env.IAM_AWS_KEY,
+  secretAccessKey: process.env.IAM_AWS_PRIVATE_KEY,
+});
+
 export const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, 'uploads/');
-    },
-    filename(req, file, cb) {
-      const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-    },
+  storage: multerS3({
+    s3,
+    acl: 'public-read',
+    bucket: 'cucook/titleImg',
   }),
-  limits: { fileSize: 5 * 1024 * 1024 },
 });
