@@ -33,7 +33,12 @@ fs.readdir('uploads', (error) => {
 
 passportConfig();
 connect();
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(
+  cors({
+    origin: 'http://ec2-3-35-139-101.ap-northeast-2.compute.amazonaws.com:3000',
+    credentials: true,
+  })
+);
 app.use(morgan('dev'));
 app.use('/img', express.static(path.join(__dirname, '../uploads')));
 app.use(
