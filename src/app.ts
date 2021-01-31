@@ -11,6 +11,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import webSocket from './socket';
+import helmet from 'helmet';
 
 const app: express.Application = express();
 const session_option: object = {
@@ -33,9 +34,10 @@ fs.readdir('uploads', (error) => {
 
 passportConfig();
 connect();
+app.use(helmet());
 app.use(
   cors({
-    origin: '*',
+    origin: 'http://www.cucook.net:3000/',
     credentials: true,
   })
 );
