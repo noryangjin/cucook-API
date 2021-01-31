@@ -37,7 +37,7 @@ app.use(
   cors({
     origin:
       'http://ec2-52-79-240-152.ap-northeast-2.compute.amazonaws.com:3000/',
-    optionsSuccessStatus: 200,
+    credentials: true,
   })
 );
 app.use(morgan('dev'));
