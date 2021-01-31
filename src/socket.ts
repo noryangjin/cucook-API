@@ -5,8 +5,7 @@ const webSocket = (server, app) => {
   const io = socketIO(server, {
     path: '/socket.io',
     cors: {
-      origin:
-        'http://ec2-52-79-240-152.ap-northeast-2.compute.amazonaws.com:3000',
+      origin: 'http://www.cucook.net/',
     },
   });
 
