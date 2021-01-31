@@ -5,7 +5,7 @@ const webSocket = (server, app) => {
   const io = socketIO(server, {
     path: '/socket.io',
     cors: {
-      origin: 'http://www.cucook.net/',
+      origin: 'http://www.cucook.net:3000/',
     },
   });
 

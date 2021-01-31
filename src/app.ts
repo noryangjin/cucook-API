@@ -35,7 +35,7 @@ passportConfig();
 connect();
 app.use(
   cors({
-    origin: 'http://www.cucook.net/',
+    origin: 'http://www.cucook.net:3000/',
     credentials: true,
   })
 );
