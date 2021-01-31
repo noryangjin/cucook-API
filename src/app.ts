@@ -37,7 +37,7 @@ connect();
 app.use(helmet());
 app.use(
   cors({
-    origin: 'http://www.cucook.net:3000',
+    origin: ['http://www.cucook.net:3000', 'http://www.cucook.net:3000/'],
     credentials: true,
   })
 );

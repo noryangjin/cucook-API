@@ -1,7 +1,6 @@
 import Post from '../shemas/post';
 import mongoose from 'mongoose';
 import multer from 'multer';
-import path from 'path';
 import Comment from '../shemas/comment';
 import multerS3 from 'multer-s3';
 import aws from 'aws-sdk';
