@@ -10,10 +10,10 @@ export const sendEmail = (req, res, next) => {
     const { username, guestEmail, title, content } = req.body;
     const smtpTransport = nodemailer.createTransport({
       service: 'gmail',
-      port: 587,
+      pool: true,
+      port: 465,
       host: 'smtp.gmail.com',
-      secure: false,
-      requireTLS: true,
+      secure: true,
       auth: {
         user: MYEMAIL,
         pass: EMAIL_PASSWORD,
