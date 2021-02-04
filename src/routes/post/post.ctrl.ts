@@ -137,28 +137,24 @@ export const searchPost = async (req, res, next) => {
     const user_ = user
       ? await Post.find({
           writer: user['_id'],
-        })
-          .populate('writer', '_id, username')
-          .sort({ publishedDate: -1 })
-      : [];
+        }).populate('writer', '_id, username')
+      : /*.sort({ publishedDate: -1 })*/
+        [];
 
     const title = await Post.find({
       title: { $regex: term, $options: 'i' },
-    })
-      .populate('writer', '_id, username')
-      .sort({ publishedDate: -1 });
+    }).populate('writer', '_id, username');
+    /*.sort({ publishedDate: -1 });*/
 
     const ingredients = await Post.find({
       ingredients: { $regex: term, $options: 'i' },
-    })
-      .populate('writer', '_id, username')
-      .sort({ publishedDate: -1 });
+    }).populate('writer', '_id, username');
+    /*.sort({ publishedDate: -1 });*/
 
     const tags = await Post.find({
       tags: { $regex: term, $options: 'i' },
-    })
-      .populate('writer', '_id, username')
-      .sort({ publishedDate: -1 });
+    }).populate('writer', '_id, username');
+    /*.sort({ publishedDate: -1 });*/
 
     const data = [...user_, ...title, ...ingredients, ...tags];
     const array = data.map((post) => {
