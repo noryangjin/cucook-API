@@ -17,7 +17,6 @@ export const postList = async (req, res, next) => {
 
     const data = await Post.find(query)
       .populate('writer', '_id, username')
-      .sort(sort_)
       .limit(page_ * 10);
 
     const result = data.map((post) => {
